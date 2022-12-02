@@ -10,19 +10,20 @@ import (
 )
 
 var (
-	domain = "http://localhost:8080/do/%s"
+	domain = "http://localhost:8080/%s"
 )
+
+type request struct {
+	Data string `json:"data"`
+	Ttl  int    `json:"ttl"` //hour
+}
 
 func main() {
 	//s := store.NewMemory()
 	s := store.NewRedis("127.0.0.1:6379", "-")
 	g := generator.NewGenerator()
 	router := gin.Default()
-	router.POST("/generate", func(c *gin.Context) {
-		type request struct {
-			Data string `json:"data"`
-			Ttl  int    `json:"ttl"` //hour
-		}
+	router.POST("/", func(c *gin.Context) {
 
 		var req request
 		if err := c.ShouldBindJSON(&req); err != nil {
@@ -41,7 +42,7 @@ func main() {
 
 		c.String(http.StatusOK, domain, url)
 	})
-	router.GET("/do/:url", func(c *gin.Context) {
+	router.GET("/:url", func(c *gin.Context) {
 		url, err := s.Get(c.Param("url"))
 		if err != nil {
 			c.String(http.StatusNotFound, "Not Found %s", url)

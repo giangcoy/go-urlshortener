@@ -1,6 +1,8 @@
 package generator
 
 import (
+	"time"
+
 	"github.com/sony/sonyflake"
 )
 
@@ -16,7 +18,7 @@ type Generator struct {
 
 func NewGenerator() *Generator {
 	return &Generator{
-		sf: sonyflake.NewSonyflake(sonyflake.Settings{}),
+		sf: sonyflake.NewSonyflake(sonyflake.Settings{StartTime: time.Date(2022, 12, 1, 0, 0, 0, 0, time.UTC)}),
 	}
 }
 
