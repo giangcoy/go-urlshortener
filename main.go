@@ -14,7 +14,8 @@ var (
 )
 
 func main() {
-	s := store.NewMemory()
+	//s := store.NewMemory()
+	s := store.NewRedis("127.0.0.1:6379", "-")
 	g := generator.NewGenerator()
 	router := gin.Default()
 	router.POST("/generate", func(c *gin.Context) {
